@@ -34,6 +34,11 @@ const Login = () => {
     }
   };
 
+  const handleSocialLogin = (provider) => {
+    // In a real app, this would integrate with OAuth providers
+    alert(`${provider} login would be implemented here`);
+  };
+
   return (
     <div className="form-container">
       <h1>Login</h1>
@@ -49,7 +54,7 @@ const Login = () => {
             className="form-control"
             value={formData.email}
             onChange={handleChange}
-            required
+            required    
           />
         </div>
         
@@ -68,15 +73,41 @@ const Login = () => {
         
         <button 
           type="submit" 
-          className="btn btn-primary" 
+          className="btn btn-primary btn-block" 
           disabled={loading}
         >
           {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
       
-      <p className="mt-3">
-        Don't have an account? <Link to="/register">Register here</Link>
+      <div className="auth-separator">
+        <span>OR</span>
+      </div>
+      
+      <div className="auth-providers">
+        <button 
+          className="auth-button auth-button-google" 
+          onClick={() => handleSocialLogin('Google')}
+        >
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v7/icons/google.svg" alt="Google" />
+          Login with Google
+        </button>
+        
+        <button 
+          className="auth-button auth-button-github" 
+          onClick={() => handleSocialLogin('GitHub')}
+        >
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v7/icons/github.svg" alt="GitHub" />
+          Login with GitHub
+        </button>
+      </div>
+      
+      <p className="auth-footer">
+        Don't have an account? <Link to="/register-account">Register here</Link>
+      </p>
+      
+      <p className="auth-footer">
+        <Link to="/forgot-password">Forgot your password?</Link>
       </p>
     </div>
   );

@@ -5,11 +5,15 @@ import RegistrationForm from './components/RegistrationForm'
 import EventSchedule from './components/EventSchedule'
 import ConfirmationPage from './components/ConfirmationPage'
 import Ticket from './components/Ticket'
+import EnhancedTicket from './components/EnhancedTicket'
 import QRScanner from './components/QRScanner'
 import HomePage from './components/HomePage'
 import Login from './components/Login'
 import Register from './components/Register'
 import AdminDashboard from './components/AdminDashboard'
+import EventDetails from './components/EventDetails'
+import FeedbackForm from './components/FeedbackForm'
+import Chatbot from './components/Chatbot'
 import { AuthContext } from './context/AuthContext'
 
 // Protected route component
@@ -38,25 +42,45 @@ function App() {
     <div className="app-container">
       <header>
         <nav>
-          <Link to="/" className="nav-link">Home</Link>
-          <Link to="/events" className="nav-link">Events</Link>
+          <div className="nav-brand">
+            <Link to="/" className="brand-link">
+              <div className="brand-logo">
+                <span className="logo-text">Nuvon</span>
+                <span className="logo-dot"></span>
+              </div>
+            </Link>
+          </div>
           
-          {isAuthenticated ? (
-            <>
-              <Link to="/register" className="nav-link">Register for Event</Link>
-              {isAdmin && <Link to="/admin" className="nav-link">Admin Dashboard</Link>}
-              {isAdmin && <Link to="/scanner" className="nav-link">Scanner</Link>}
-              <span className="user-info">
-                Welcome, {user?.name} ({isAdmin ? 'Admin' : 'User'})
-              </span>
-              <button onClick={logout} className="nav-link logout-btn">Logout</button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="nav-link">Login</Link>
-              <Link to="/register-account" className="nav-link">Sign Up</Link>
-            </>
-          )}
+          <div className="nav-links">
+            <Link to="/" className="nav-link">Home</Link>
+            <Link to="/events" className="nav-link">Events</Link>
+            {isAuthenticated && <Link to="/register" className="nav-link">Register</Link>}
+            <button className="nav-link nav-chat-btn" onClick={() => document.querySelector('.chatbot-toggle').click()}>
+              <i className="fas fa-comment-dots"></i> AI Assistant
+            </button>
+          </div>
+          
+          <div className="nav-auth">
+            {isAuthenticated ? (
+              <>
+                {isAdmin && (
+                  <>
+                    <Link to="/admin" className="nav-link">Admin</Link>
+                    <Link to="/scanner" className="nav-link">Scanner</Link>
+                  </>
+                )}
+                <span className="user-info">
+                  <i className="fas fa-user-circle"></i> {user?.name}
+                </span>
+                <button onClick={logout} className="nav-link logout-btn">Logout</button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="nav-link">Login</Link>
+                <Link to="/register-account" className="nav-link btn-sign-up">Sign Up</Link>
+              </>
+            )}
+          </div>
         </nav>
       </header>
       
@@ -64,8 +88,10 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/events" element={<EventSchedule />} />
+          <Route path="/events/:id" element={<EventDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register-account" element={<Register />} />
+          <Route path="/feedback/:eventId?" element={<FeedbackForm />} />
           
           {/* Protected routes */}
           <Route 
@@ -84,10 +110,8 @@ function App() {
               </ProtectedRoute>
             } 
           />
-          <Route 
-            path="/ticket/:id" 
-            element={<Ticket />} 
-          />
+          <Route path="/ticket/:id" element={<Ticket />} />
+          <Route path="/enhanced-ticket/:id" element={<EnhancedTicket />} />
           <Route 
             path="/admin" 
             element={
@@ -110,6 +134,9 @@ function App() {
       <footer>
         <p>© 2023 Event Registration Portal | Team Nuvon</p>
       </footer>
+      
+      {/* Chatbot component */}
+      <Chatbot />
     </div>
   )
 }
